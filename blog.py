@@ -2,10 +2,9 @@
 
 # imports
 from flask import Flask, render_template, request, session, \
-      flash, redirect, url_for, g
+  flash, redirect, url_for, g
 import sqlite3
 from functools import wraps
-
 
 # configuration
 DATABASE = 'blog.db'
@@ -18,7 +17,7 @@ app = Flask(__name__)
 # pulls in app configuration by looking for UPPERCASE variables
 app.config.from_object(__name__)
 
-# function used for connecting to the database 
+# function used for connecting to the database
 def connect_db():
   return sqlite3.connect(app.config['DATABASE'])
 
@@ -38,9 +37,9 @@ def login():
   status_code = 200
   if request.method == 'POST':
     if request.form['username'] != app.config['USERNAME'] or \
-            request.form['password'] != app.config['PASSWORD']:
-      error = 'Invalid Credentials. Please try again.'
-      status_code = 401
+          request.form['password'] != app.config['PASSWORD']:
+        error = 'Invalid Credentials. Please try again.'
+        status_code = 401
     else:
       session['logged_in'] = True
       return redirect(url_for('main'))
@@ -61,7 +60,7 @@ def add():
   title = request.form['title']
   post = request.form['post']
   if not title or not post:
-    flash("All fields are required. Please try again")
+    flash("All fields are required. Please try again.")
     return redirect(url_for('main'))
   else:
     g.db = connect_db()
@@ -75,7 +74,7 @@ def add():
 @app.route('/logout')
 def logout():
   session.pop('logged_in', None)
-  flash('You were logged out')
+  flash('You were logged out.')
   return redirect(url_for('login'))
 
 if __name__ == '__main__':
